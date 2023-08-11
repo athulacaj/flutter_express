@@ -2,6 +2,7 @@ import 'package:dart_express/dart_express.dart';
 
 void main() {
   final app = DartExpress();
+  const portNumber = 6969;
 
   app.get('/', (Req req, res) {
     res.send('Hello World!');
@@ -13,7 +14,7 @@ void main() {
     res.send("parent 1");
   });
 
-  app.listen(3000, () {
-    print('Listening on port 3000');
+  app.listen(6900, () {
+    print('Listening on port $portNumber');
   });
 }
