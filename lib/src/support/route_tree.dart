@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dart_express/src/constants/types.dart';
+
 class RouteTreeNode {
   final String path;
   final String pathPart;
   Function? _callback;
+  List<DECallBackWithNext>? _middlewares;
   final Map<String, RouteTreeNode> children = {};
   final String? paramKey;
 
@@ -14,7 +17,13 @@ class RouteTreeNode {
     _callback = callback;
   }
 
+  setMiddlewares(List<DECallBackWithNext> middlewares) {
+    _middlewares = middlewares;
+  }
+
   get callback => _callback;
+
+  get middlewares => _middlewares;
 
   setParam(Map<dynamic, String> params) {
     _params = params;
@@ -24,15 +33,17 @@ class RouteTreeNode {
 
   @override
   String toString() =>
-      'RouteTreeNode(path: $path, pathPart: $pathPart,params:$params)';
+      'RouteTreeNode(path: $path, pathPart: $pathPart,params:$params ,callback: ${callback.toString()}, children: $children))';
 }
 
 class RouteTree {
   final RouteTreeNode root = RouteTreeNode("", "");
 
-  addRoute(String path, Function callback) {
+  addRoute(String path, Function callback,
+      [List<DECallBackWithNext>? middlewares]) {
     if (path == "/") {
       root.setCallback(callback);
+      root.setMiddlewares(middlewares ?? []);
       return;
     }
 
@@ -59,6 +70,7 @@ class RouteTree {
         currentNode = newNode;
       }
       currentNode.setCallback(callback);
+      currentNode.setMiddlewares(middlewares ?? []);
     }
   }
 

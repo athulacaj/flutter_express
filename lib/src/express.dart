@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_express/src/constants/types.dart';
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
 import 'package:dart_express/src/support/types.dart';
@@ -9,15 +10,16 @@ import 'models/res_model.dart';
 class DartExpress {
   // HttpRequest request;
   // Map listendedRequests = {};
-  late HttpServer requests;
+  late HttpServer _requests;
+  final RequestManager _requestManager = RequestManager();
 
   Future<void> listen(int port, Function callback) async {
     // close all connections the server is listening to port 8888
 
-    requests = await HttpServer.bind(InternetAddress.anyIPv4, port);
+    _requests = await HttpServer.bind(InternetAddress.anyIPv4, port);
     callback();
 
-    await requests.forEach((request) async {
+    await _requests.forEach((request) async {
       if (request.method == 'OPTIONS') {
         // Handle CORS preflight request
         setCorsHeaders(request.response);
@@ -27,14 +29,17 @@ class DartExpress {
       }
 
       final RouteTreeNode? listenedRequest =
-          RequestManager.getRequest(request.method, request.uri.path);
+          _requestManager.getRequest(request.uri.path, request.method);
 
       final Res res = Res(response: request.response);
       if (listenedRequest != null) {
         final Req req =
             await Req.fromHttpRequest(request, params: listenedRequest.params);
         try {
-          listenedRequest.callback(req, res);
+          // listenedRequest.callback(req, res);
+          _addMiddleware(listenedRequest.middlewares ?? [], req, res,
+              listenedRequest.callback, 0);
+
           return;
         } catch (e) {
           print(e);
@@ -47,20 +52,34 @@ class DartExpress {
     });
   }
 
-  get(String path, void Function(Req req, Res res) callback) {
-    RequestManager.addRequest(path, Method.get, hanldeException(callback));
+  void _addMiddleware(List<DECallBackWithNext> middlewares, Req req, Res res,
+      DECallBack callback, int i) {
+    if (i == middlewares.length) {
+      callback(req, res);
+      return;
+    }
+    middlewares[i](req, res, () {
+      _addMiddleware(middlewares, req, res, callback, i + 1);
+    });
   }
 
-  post(String path, void Function(Req req, Res res) callback) {
-    RequestManager.addRequest(path, Method.post, hanldeException(callback));
+  use(String path, List<DECallBackWithNext> middlewares) {
+    _requestManager.addRequest(path, Method.get, null,
+        middlewares: middlewares);
   }
 
-  use(String path, void Function(Req req, Res res) callback) {
-    RequestManager.addRequest(path, Method.get, hanldeException(callback));
+  get(String path, DECallBack callback,
+      {List<DECallBackWithNext>? middlewares}) {
+    _requestManager.addRequest(path, Method.get, hanldeException(callback),
+        middlewares: middlewares);
+  }
+
+  post(String path, DECallBack callback) {
+    _requestManager.addRequest(path, Method.post, hanldeException(callback));
   }
 
   end() {
-    requests.close();
+    _requests.close();
   }
 }
 

@@ -1,18 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dart_express/src/constants/types.dart';
 import 'package:dart_express/src/support/route_tree.dart';
 import 'package:dart_express/src/support/types.dart';
 
 class RequestManager {
-  static final RouteTree _getRequestTree = RouteTree();
-  static final RouteTree _postRequestTree = RouteTree();
-  static final RouteTree _patchRequestTree = RouteTree();
-  static final RouteTree _deleteRequestTree = RouteTree();
-  static final RouteTree _putRequestTree = RouteTree();
+  final RouteTree _getRequestTree = RouteTree();
+  final RouteTree _postRequestTree = RouteTree();
+  final RouteTree _patchRequestTree = RouteTree();
+  final RouteTree _deleteRequestTree = RouteTree();
+  final RouteTree _putRequestTree = RouteTree();
 
-  static addRequest(String path, String method, Function callback) {
+  get getRequestTree => _getRequestTree;
+
+  void addRequest(String path, String method, callback,
+      {List<DECallBackWithNext>? middlewares}) {
     switch (method) {
       case Method.get:
-        _getRequestTree.addRoute(path, callback);
+        _getRequestTree.addRoute(path, callback, middlewares);
         break;
       case Method.post:
         _postRequestTree.addRoute(path, callback);
@@ -31,7 +35,7 @@ class RequestManager {
     }
   }
 
-  static RouteTreeNode? getRequest(String method, String path) {
+  RouteTreeNode? getRequest(String path, String method) {
     switch (method) {
       case Method.get:
         return _getRequestTree.getRoute(path);

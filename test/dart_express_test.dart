@@ -6,6 +6,11 @@ void main() {
       // Additional setup goes here.
     });
 
+    // run on each test
+    setUpAll(() {
+      // Additional setup once for all tests.
+    });
+
     test('First Test', () {});
   });
 }
