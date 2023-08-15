@@ -105,8 +105,8 @@ class RouteTree {
       currentNode.setCallback(callback);
       currentNode.setMiddlewares(middlewares ?? []);
       currentNode.setEnd(i == pathParts.length - 1);
-      currentNode.setOrder(order ?? 0);
     }
+    currentNode.setOrder(order ?? 0);
   }
 
   RouteTreeNode? getRoute(String path) {
