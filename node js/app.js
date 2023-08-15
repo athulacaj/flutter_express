@@ -2,7 +2,6 @@ const app=require('express')();
 
 function middleware(req,res,next){
     console.log('Middleware');
-    res.send('Middleware');
     next();
     console.log('Middleware next');
 }
@@ -30,10 +29,10 @@ app.get('/parent/*', (req, res) => {
   });
   
 
-app.use((re,res,next)=>{
-    console.log('* middleware');
-    next();
-})
+
+app.get("*",(req,res)=>{
+    res.send('404');
+});
 
 app.listen(4000,()=>{
     console.log('Server is running at port 4000');

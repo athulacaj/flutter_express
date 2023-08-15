@@ -12,6 +12,7 @@ class DartExpress {
   // Map listendedRequests = {};
   late HttpServer _requests;
   final RequestManager _requestManager = RequestManager();
+  final MiddlewareManager _middlewareManager = MiddlewareManager();
 
   Future<void> listen(int port, Function callback) async {
     // close all connections the server is listening to port 8888
@@ -64,8 +65,7 @@ class DartExpress {
   }
 
   use(String path, List<DECallBackWithNext> middlewares) {
-    _requestManager.addRequest(path, Method.get, null,
-        middlewares: middlewares);
+    _middlewareManager.addMiddleware(path, middlewares);
   }
 
   get(String path, DECallBack callback,

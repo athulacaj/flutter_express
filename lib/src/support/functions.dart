@@ -52,3 +52,15 @@ class RequestManager {
     }
   }
 }
+
+class MiddlewareManager {
+  final RouteTree _middlewareTree = RouteTree();
+
+  void addMiddleware(String path, List<DECallBackWithNext> middlewares) {
+    _middlewareTree.addRoute(path, () => {}, middlewares);
+  }
+
+  List<RouteTreeNode> getMiddleware(String path) {
+    return _middlewareTree.getMiddleware(path);
+  }
+}

@@ -28,6 +28,10 @@ void main() {
 
   // app.use("path", (req, res) { },)
 
+  app.get("*", (req, res) {
+    res.send("404");
+  });
+
   app.listen(3000, () {
     print('Listening on port 3000');
   });
