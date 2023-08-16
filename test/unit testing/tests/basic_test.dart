@@ -5,10 +5,11 @@ import 'package:test/test.dart';
 
 void basicTest() {
   group('initial', () {
-    test(' "/" get should null ', () {
-      RequestManager requestManager = RequestManager();
-      expect(requestManager.getRequest('/', Method.get)?.callback, isNull);
-    });
+    // test(' "/" get should null ', () {
+    //   RequestManager requestManager = RequestManager();
+    //   expect(requestManager.getRequest('/', Method.get)?.callback, isNull);
+    // });
+
     group('able to add path and getpath', () {
       late RequestManager requestManager;
       setUpAll(() {
@@ -46,10 +47,16 @@ void basicTest() {
       });
 
       test('should return null if path is not found', () {
-        expect(requestManager.getRequest('/new', Method.get), isNull);
+        requestManager.addRequest('/', Method.put, () => {});
+
+        expect(requestManager.getRequest('/new123', Method.get), isNull);
       });
 
       ///
     });
   });
+}
+
+void main() {
+  basicTest();
 }

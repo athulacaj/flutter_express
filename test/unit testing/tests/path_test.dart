@@ -37,7 +37,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({0: '4'}));
+          equals({'0': '4'}));
 
       addPath = '/long/path/1/2/3/*';
       requestPath = '/long/path/1/2/3/4/5';
@@ -45,7 +45,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({0: '4/5'}));
+          equals({'0': '4/5'}));
     });
 
     test('multiple * path', () {
@@ -56,7 +56,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({0: '4', 1: '5'}));
+          equals({'0': '4', '1': '5'}));
     });
     test("named args", () {
       RequestManager requestManager = RequestManager();
@@ -87,7 +87,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({'name': '4', 0: '5'}));
+          equals({'name': '4', '0': '5'}));
     });
     test("multiple named params with multiple * path", () {
       RequestManager requestManager = RequestManager();
@@ -97,7 +97,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({'name': '4', 'name2': '5', 0: '6', 1: '7'}));
+          equals({'name': '4', 'name2': '5', '0': '6', '1': '7'}));
     });
 
     test("priority of the route ", () {
@@ -159,7 +159,7 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get),
           isA<RouteTreeNode>());
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
-          equals({'name': '2', 'name2': '5', 0: 'long', 1: '3'}));
+          equals({'name': '2', 'name2': '5', '0': 'long', '1': '3'}));
     });
   });
 }

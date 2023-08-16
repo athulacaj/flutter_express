@@ -64,3 +64,34 @@ class MiddlewareManager {
     return _middlewareTree.getMiddleware(path);
   }
 }
+
+Map<String, String> extractRouteParameters(String pattern, String url) {
+  List<String> patternParts = pattern.split('/');
+  List<String> urlParts = url.split('/');
+
+  Map<String, String> params = {};
+  int i = 0;
+  String? lastKey;
+  int paramCount = 0;
+  for (i = 0; i < patternParts.length; i++) {
+    String patternPart = patternParts[i];
+    String urlPart = urlParts[i];
+
+    if (patternPart.startsWith(':')) {
+      String paramName = patternPart.substring(1); // Remove the ':' prefix
+      lastKey = paramName;
+      params[paramName] = urlPart;
+    } else if (patternPart == "*") {
+      lastKey = paramCount.toString();
+      params[paramCount.toString()] = urlPart;
+      paramCount++;
+    }
+  }
+
+  if (lastKey != null && urlParts.length > i) {
+    String v = params[lastKey]!;
+    params[lastKey] = "$v/${urlParts.sublist(i).toList().join('/')}";
+  }
+
+  return params;
+}
