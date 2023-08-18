@@ -73,15 +73,15 @@ class RouteTree {
 
   addRoute(String path, Function? callback,
       [List<DECallBackWithNext>? middlewares, int? order]) {
-    if (path.endsWith("/")) {
-      path = path.substring(0, path.length - 1);
-    }
     if (path == "/") {
       root.setCallback(callback);
       root.setMiddlewares(middlewares ?? []);
       root.setEnd(true);
       root.setOrder(order ?? 0);
       return;
+    }
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length - 1);
     }
 
     List<String> pathParts = path.split("/");
@@ -153,6 +153,9 @@ class RouteTree {
   // }
 
   RouteTreeNode? getRoute(path) {
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length - 1);
+    }
     List<String> pathParts = path.split("/");
 
     String previousPathPart = "";
@@ -166,7 +169,7 @@ class RouteTree {
         return;
       }
 
-      if (currentNode.end) {
+      if (currentNode.end && previousPathPart == "*") {
         final params = extractRouteParameters(currentNode.path, path);
         currentNode.setParam(params);
         resultNode = currentNode;
@@ -177,15 +180,18 @@ class RouteTree {
       String pathPart = pathParts[i];
 
       if (pathPart == "" && resultNode == null) {
+        previousPathPart = "";
         backtrack(currentNode, i + 1, previousPathPart);
         return;
       }
       if (pathPart != "" &&
           currentNode.children.containsKey(pathPart) &&
           resultNode == null) {
+        previousPathPart = pathPart;
         backtrack(currentNode.children[pathPart]!, i + 1, pathPart);
       }
       if (currentNode.children.containsKey("*") && resultNode == null) {
+        previousPathPart = "*";
         RouteTreeNode tempNode = currentNode.children["*"]!;
         backtrack(tempNode, i + 1, "*");
       }
@@ -203,8 +209,11 @@ class RouteTree {
   }
 
   List<RouteTreeNode> getMiddleware(path) {
-    List<String> pathParts = path.split("/");
+    if (path == "/" && root.children['*'] != null && root.children['*']!.end) {
+      return [root.children['*']!];
+    }
 
+    List<String> pathParts = path.split("/");
     final List<RouteTreeNode> middlewareList = [];
     String previousPathPart = "";
     void backtrack(RouteTreeNode currentNode, int i, String previousPathPart) {

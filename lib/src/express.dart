@@ -34,13 +34,13 @@ class DartExpress {
       _middlewareManager
           .getMiddleware(request.uri.path)
           .forEach((e) => commonMiddlewares.addAll(e.middlewares ?? []));
-      if (listenedRequest != null) {
-        final Req req =
-            await Req.fromHttpRequest(request, params: listenedRequest.params);
+      if (listenedRequest != null || commonMiddlewares.isNotEmpty) {
+        final Req req = await Req.fromHttpRequest(request,
+            params: listenedRequest?.params ?? {});
         try {
-          List middlewares = listenedRequest.middlewares ?? [];
+          List middlewares = listenedRequest?.middlewares ?? [];
           _addMiddleware([...commonMiddlewares, ...middlewares], req, res,
-              listenedRequest.callback, 0);
+              listenedRequest?.callback ?? (req, res) => {}, 0);
 
           return;
         } catch (e) {

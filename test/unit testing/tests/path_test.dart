@@ -230,6 +230,22 @@ void pathTest() {
     expect(requestManager.getRequest("/hello/1/2/3", Method.get)?.path,
         "/hello/1/2/*");
   });
+
+  test("testing path / is working", () {
+    RequestManager requestManager = RequestManager();
+    requestManager.addRequest("/", Method.get, () {});
+    requestManager.addRequest("/hi", Method.get, () {});
+    requestManager.addRequest("/hi/1", Method.get, () {});
+
+    expect(requestManager.getRequest("/", Method.get)?.path, "");
+  });
+
+  test("testing other possibilities", () {
+    RequestManager requestManager = RequestManager();
+    requestManager.addRequest("/", Method.get, () {});
+
+    expect(requestManager.getRequest("/hi", Method.get), isNull);
+  });
 }
 
 void main() {

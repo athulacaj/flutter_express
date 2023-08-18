@@ -164,6 +164,23 @@ void middlewareTest() {
       expect(nodes, isA<List<RouteTreeNode>>());
       expect(nodes[1].order, 1);
     });
+
+    test("test 2", () {
+      final MiddlewareManager _middlewareManager = MiddlewareManager();
+      String addPath = '/*';
+      String requestPath = '/';
+
+      _middlewareManager.addMiddleware(addPath, [
+        (Req req, Res res, Function next) {
+          print('Middleware 2');
+          next();
+        }
+      ]);
+
+      List<RouteTreeNode> nodes = _middlewareManager.getMiddleware(requestPath);
+      expect(nodes.length, 1);
+      expect(nodes, isA<List<RouteTreeNode>>());
+    });
   });
 }
 
