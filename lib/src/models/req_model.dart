@@ -21,7 +21,6 @@ class Req {
 
   static fromHttpRequest(HttpRequest request,
       {required Map<dynamic, String> params}) async {
-    print("request body");
     String requestBody = "{}";
     print(request.requestedUri.queryParameters);
     try {

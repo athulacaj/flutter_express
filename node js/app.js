@@ -12,6 +12,10 @@ app.get('/',middleware,(req,res)=>{
     res.send('Hello World');
 })
 
+app.get('/hello/',middleware,(req,res)=>{
+    res.send('Hello ....');
+})
+
 app.post('/',(req,res)=>{
     res.send('post on /');
 })

@@ -13,6 +13,13 @@ void pathTest() {
       expect(requestManager.getRequest(path, Method.get), isA<RouteTreeNode>());
     });
 
+    test("if / in the end", () {
+      RequestManager requestManager = RequestManager();
+      String path = '/path/';
+      requestManager.addRequest(path, Method.get, () => {});
+      expect(requestManager.getRequest(path, Method.get), isA<RouteTreeNode>());
+    });
+
     test("* - path", () {
       RequestManager requestManager = RequestManager();
       String addPath = '*';
@@ -161,6 +168,67 @@ void pathTest() {
       expect(requestManager.getRequest(requestPath, Method.get)?.params,
           equals({'name': '2', 'name2': '5', '0': 'long', '1': '3'}));
     });
+  });
+  test("all path if the specific path is not available", () {
+    RequestManager requestManager = RequestManager();
+    String path = '/*';
+    requestManager.addRequest(
+      path,
+      Method.get,
+      () => {},
+    );
+
+    requestManager.addRequest(
+      "/user",
+      Method.get,
+      () => {},
+    );
+
+    requestManager.addRequest(
+      "/any",
+      Method.get,
+      () => {},
+    );
+
+    expect(requestManager.getRequest("/any/1", Method.get)?.path, "/any/1");
+  });
+
+  test("check backtrack is working in routes", () {
+    RequestManager requestManager = RequestManager();
+    String path = '/*';
+    requestManager.addRequest(
+      path,
+      Method.get,
+      () => {},
+    );
+
+    requestManager.addRequest(
+      "/hello/*",
+      Method.get,
+      () => {},
+    );
+
+    requestManager.addRequest(
+      "/hello/1/*",
+      Method.get,
+      () => {},
+    );
+
+    requestManager.addRequest(
+      "/hello/1/2/*",
+      Method.get,
+      () => {},
+    );
+
+    expect(requestManager.getRequest("/hello/1", Method.get)?.path, "/hello/*");
+    expect(
+        requestManager.getRequest("/any/2/34/12/31/2", Method.get)?.path, "/*");
+    expect(
+        requestManager.getRequest("/hello/2/2", Method.get)?.path, "/hello/*");
+    expect(requestManager.getRequest("/hello/1/2", Method.get)?.path,
+        "/hello/1/*");
+    expect(requestManager.getRequest("/hello/1/2/3", Method.get)?.path,
+        "/hello/1/2/*");
   });
 }
 

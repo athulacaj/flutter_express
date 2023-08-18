@@ -48,7 +48,6 @@ void basicTest() {
 
       test('should return null if path is not found', () {
         requestManager.addRequest('/', Method.put, () => {});
-
         expect(requestManager.getRequest('/new123', Method.get), isNull);
       });
 

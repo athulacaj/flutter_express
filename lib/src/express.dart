@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dart_express/src/constants/types.dart';
+import 'package:dart_express/src/constants/function_types.dart';
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
 import 'package:dart_express/src/support/types.dart';
@@ -8,15 +8,11 @@ import 'models/req_model.dart';
 import 'models/res_model.dart';
 
 class DartExpress {
-  // HttpRequest request;
-  // Map listendedRequests = {};
   late HttpServer _requests;
   final RequestManager _requestManager = RequestManager();
   final MiddlewareManager _middlewareManager = MiddlewareManager();
 
   Future<void> listen(int port, Function callback) async {
-    // close all connections the server is listening to port 8888
-
     _requests = await HttpServer.bind(InternetAddress.anyIPv4, port);
     callback();
 
@@ -33,17 +29,21 @@ class DartExpress {
           _requestManager.getRequest(request.uri.path, request.method);
 
       final Res res = Res(response: request.response);
+
+      List commonMiddlewares = [];
+      _middlewareManager
+          .getMiddleware(request.uri.path)
+          .forEach((e) => commonMiddlewares.addAll(e.middlewares ?? []));
       if (listenedRequest != null) {
         final Req req =
             await Req.fromHttpRequest(request, params: listenedRequest.params);
         try {
-          // listenedRequest.callback(req, res);
-          _addMiddleware(listenedRequest.middlewares ?? [], req, res,
+          List middlewares = listenedRequest.middlewares ?? [];
+          _addMiddleware([...commonMiddlewares, ...middlewares], req, res,
               listenedRequest.callback, 0);
 
           return;
         } catch (e) {
-          print(e);
           return res
               .status(HttpStatus.internalServerError)
               .send({"message": "inavlid request", "data": e});
@@ -98,12 +98,6 @@ Function hanldeException(Function callback) {
     try {
       await callback(req, res);
     } catch (e) {
-      // print({
-      //   "message": "inavlid ${req.type} request",
-      //   "error": e,
-      //   "headers": req.toMap()
-      // });
-      print(e);
       return res.status(HttpStatus.internalServerError).send({
         "message": "inavlid ${req.type} request",
         "error": e.toString(),

@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:dart_express/src/constants/types.dart';
+import 'package:dart_express/src/constants/function_types.dart';
 import 'package:dart_express/src/support/route_tree.dart';
 import 'package:dart_express/src/support/types.dart';
 
@@ -54,14 +54,18 @@ class RequestManager {
 }
 
 class MiddlewareManager {
-  final RouteTree _middlewareTree = RouteTree();
+  final RouteTree middlewareTree = RouteTree();
+  int _order = 0;
 
   void addMiddleware(String path, List<DECallBackWithNext> middlewares) {
-    _middlewareTree.addRoute(path, () => {}, middlewares);
+    middlewareTree.addRoute(path, () => {}, middlewares, _order);
+    _order++;
   }
 
   List<RouteTreeNode> getMiddleware(String path) {
-    return _middlewareTree.getMiddleware(path);
+    List<RouteTreeNode> middlewares = middlewareTree.getMiddleware(path);
+    middlewares.sort((a, b) => a.order.compareTo(b.order));
+    return middlewares;
   }
 }
 
