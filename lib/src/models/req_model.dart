@@ -10,6 +10,7 @@ class Req {
   final Map<dynamic, String> params;
   final Map query;
   final String type;
+  final String method;
 
   Req({
     required this.headers,
@@ -17,6 +18,7 @@ class Req {
     required this.params,
     required this.query,
     required this.type,
+    required this.method,
   });
 
   static fromHttpRequest(HttpRequest request,
@@ -46,6 +48,7 @@ class Req {
       body: jsonDecode(requestBody),
       params: params,
       query: request.requestedUri.queryParameters,
+      method: request.method,
     );
   }
 

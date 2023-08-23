@@ -153,8 +153,12 @@ class RouteTree {
   // }
 
   RouteTreeNode? getRoute(path) {
-    if (path.endsWith("/")) {
-      path = path.substring(0, path.length - 1);
+    // if (path.endsWith("/")) {
+    //   path = path.substring(0, path.length - 1);
+    // }
+
+    if (path == "/" && root.children['*'] != null && root.children['*']!.end) {
+      return root.children['*'];
     }
     List<String> pathParts = path.split("/");
 

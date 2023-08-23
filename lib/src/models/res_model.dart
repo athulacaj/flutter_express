@@ -14,14 +14,8 @@ class Res {
   };
 
   Res({required this.response});
-  void send(data) {
+  void send(String data) {
     response.statusCode = _statusCode;
-    late String resData;
-    try {
-      resData = jsonEncode(data);
-    } catch (e) {
-      resData = data.toString();
-    }
     response
       ..headers.contentType = ContentType(
         ContentType.json.primaryType,
@@ -34,9 +28,19 @@ class Res {
       ..headers
           .add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
       ..headers.add('Access-Control-Max-Age', '600')
-      ..write(resData);
+      ..write(data);
 
     response.close();
+  }
+
+  void json(Map data) {
+    String resData;
+    try {
+      resData = jsonEncode(data);
+    } catch (e) {
+      resData = e.toString();
+    }
+    send(resData);
   }
 
   Res status(int statusCode) {

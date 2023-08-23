@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dart_express/src/constants/function_types.dart';
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
-import 'package:dart_express/src/support/types.dart';
+import 'package:dart_express/src/constants/route_methods.dart';
 
 import 'models/req_model.dart';
 import 'models/res_model.dart';
@@ -12,15 +12,15 @@ class DartExpress {
   final RequestManager _requestManager = RequestManager();
   final MiddlewareManager _middlewareManager = MiddlewareManager();
 
+  /// Start the server listening on the specified port
   Future<void> listen(int port, Function callback) async {
     _requests = await HttpServer.bind(InternetAddress.anyIPv4, port);
     callback();
 
     await _requests.forEach((request) async {
-      if (request.method == 'OPTIONS') {
-        // Handle CORS preflight request
-        setCorsHeaders(request.response);
+      if (request.method == 'DOC') {
         request.response.statusCode = HttpStatus.ok;
+        // request.response.write(_requestManager.getDoc());
         request.response.close();
         return;
       }
@@ -46,10 +46,10 @@ class DartExpress {
         } catch (e) {
           return res
               .status(HttpStatus.internalServerError)
-              .send({"message": "inavlid request", "data": e});
+              .json({"message": "inavlid request", "data": e});
         }
       }
-      return res.status(HttpStatus.notFound).send({"message": "url Not found"});
+      return res.status(HttpStatus.notFound).json({"message": "url Not found"});
     });
   }
 
@@ -68,17 +68,22 @@ class DartExpress {
     _middlewareManager.addMiddleware(path, middlewares);
   }
 
-  get(String path, DECallBack callback,
+  /// Add a GET request to the server
+  /// * The callback must be a function that takes in a Req, Res object. note: if the [middlewares] are passed this will executed after the middlewares are executed
+  /// * Optionally, you can pass in a list of middlewares to be executed before the callback
+  /// * For middleware the callback must be a function that takes in a Req, Res object and a void that can be called to execute the next middleware or the callback
+  void get(String path, DECallBack callback,
       {List<DECallBackWithNext>? middlewares}) {
     _requestManager.addRequest(path, Method.get, hanldeException(callback),
         middlewares: middlewares);
   }
 
-  post(String path, DECallBack callback) {
+  /// Add a POST request to the server
+  void post(String path, DECallBack callback) {
     _requestManager.addRequest(path, Method.post, hanldeException(callback));
   }
 
-  end() {
+  void end() {
     _requests.close();
   }
 }
@@ -98,7 +103,7 @@ Function hanldeException(Function callback) {
     try {
       await callback(req, res);
     } catch (e) {
-      return res.status(HttpStatus.internalServerError).send({
+      return res.status(HttpStatus.internalServerError).json({
         "message": "inavlid ${req.type} request",
         "error": e.toString(),
         "request": req.toMap(),

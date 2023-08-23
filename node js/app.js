@@ -1,6 +1,13 @@
 const app=require('express')();
 
 
+app.use("/",(req,res,next)=>{
+    res.send("mid /");
+})
+app.use((req,res,next)=>{
+    res.send("none");
+})
+
 
 app.get("/",(req,res)=>{
     res.send({message:"Hello World"});

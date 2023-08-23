@@ -1,6 +1,6 @@
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
-import 'package:dart_express/src/support/types.dart';
+import 'package:dart_express/src/constants/route_methods.dart';
 import 'package:test/test.dart';
 
 void basicTest() {

@@ -1,6 +1,6 @@
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
-import 'package:dart_express/src/support/types.dart';
+import 'package:dart_express/src/constants/route_methods.dart';
 import 'package:test/test.dart';
 
 void pathTest() {
@@ -245,6 +245,19 @@ void pathTest() {
     requestManager.addRequest("/", Method.get, () {});
 
     expect(requestManager.getRequest("/hi", Method.get), isNull);
+  });
+
+  test("testing path '*' ", () {
+    RequestManager requestManager = RequestManager();
+    requestManager.addRequest("*", Method.get, () {});
+
+    expect(requestManager.getRequest("/", Method.get), isNotNull);
+  });
+  test("testing path '/*' ", () {
+    RequestManager requestManager = RequestManager();
+    requestManager.addRequest("/*", Method.get, () {});
+
+    expect(requestManager.getRequest("/", Method.get), isNotNull);
   });
 }
 

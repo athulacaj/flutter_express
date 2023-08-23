@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dart_express/src/constants/function_types.dart';
 import 'package:dart_express/src/support/route_tree.dart';
-import 'package:dart_express/src/support/types.dart';
+import 'package:dart_express/src/constants/route_methods.dart';
 
 class RequestManager {
   final RouteTree _getRequestTree = RouteTree();

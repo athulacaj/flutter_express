@@ -4,20 +4,17 @@ void main() {
   final app = DartExpress();
   const portNumber = 3000;
 
-  void m(Req req, Res res, Function next) {
-    print('Middleware 1');
-    next();
-  }
-
-  app.use("/*", [m]);
-
-  app.get('/', (Req req, res) {
-    print("sending response");
-    res.send('Hello World! from "/"');
-  });
-
-  app.get('/parent/', (Req req, res) {
-    res.send("parent 1");
+  app.get("*", (req, res) {
+    req.headers;
+    res.send("helllo");
+  }, middlewares: [
+    (req, res, next) {
+      print("hello");
+      next();
+    }
+  ]);
+  app.get("/hello", (req, res) {
+    res.json({"hello": 'world'});
   });
 
   app.listen(portNumber, () {
