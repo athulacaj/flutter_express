@@ -18,6 +18,13 @@ class DartExpress {
     callback();
 
     await _requests.forEach((request) async {
+      if (request.method == 'OPTIONS') {
+        // Handle CORS preflight request
+        setCorsHeaders(request.response);
+        request.response.statusCode = HttpStatus.ok;
+        request.response.close();
+        return;
+      }
       if (request.method == 'DOC') {
         request.response.statusCode = HttpStatus.ok;
         // request.response.write(_requestManager.getDoc());
