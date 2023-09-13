@@ -190,7 +190,7 @@ void pathTest() {
       () => {},
     );
 
-    expect(requestManager.getRequest("/any/1", Method.get)?.path, "/any/1");
+    expect(requestManager.getRequest("/any/1", Method.get)?.path, "/*");
   });
 
   test("check backtrack is working in routes", () {

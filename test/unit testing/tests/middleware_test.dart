@@ -182,6 +182,31 @@ void middlewareTest() {
       expect(nodes, isA<List<RouteTreeNode>>());
     });
   });
+
+  test("testing muiltiple adding middleware in same path", () {
+    final MiddlewareManager _middlewareManager = MiddlewareManager();
+    String addPath = '/*';
+    String requestPath = '/';
+
+    _middlewareManager.addMiddleware(addPath, [
+      (Req req, Res res, Function next) {
+        res.send("middleware 1");
+      },
+      (Req req, Res res, Function next) {
+        res.send("middleware 1");
+      }
+    ]);
+    _middlewareManager.addMiddleware(addPath, [
+      (Req req, Res res, Function next) {
+        next();
+      }
+    ]);
+
+    List<RouteTreeNode> nodes = _middlewareManager.getMiddleware(requestPath);
+    expect(nodes.length, 1);
+    expect(nodes[0].middlewares.length, 3);
+    expect(nodes, isA<List<RouteTreeNode>>());
+  });
 }
 
 void main() {

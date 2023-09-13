@@ -18,13 +18,14 @@ class DartExpress {
     callback();
 
     await _requests.forEach((request) async {
-      if (request.method == 'OPTIONS') {
-        // Handle CORS preflight request
-        setCorsHeaders(request.response);
-        request.response.statusCode = HttpStatus.ok;
-        request.response.close();
-        return;
-      }
+      // if (request.method == 'OPTIONS') {
+      //   // Handle CORS preflight request
+      //   setCorsHeaders(request.response);
+      //   request.response.statusCode = HttpStatus.ok;
+      //   request.response.close();
+      //   return;
+      // }
+
       if (request.method == 'DOC') {
         request.response.statusCode = HttpStatus.ok;
         // request.response.write(_requestManager.getDoc());
@@ -46,8 +47,18 @@ class DartExpress {
             params: listenedRequest?.params ?? {});
         try {
           List middlewares = listenedRequest?.middlewares ?? [];
-          _addMiddleware([...commonMiddlewares, ...middlewares], req, res,
-              listenedRequest?.callback ?? (req, res) => {}, 0);
+          _addMiddleware(
+              [...commonMiddlewares, ...middlewares],
+              req,
+              res,
+              listenedRequest?.callback ??
+                  (req, res) => {
+                        res.status(HttpStatus.notFound).json({
+                          "message": "url Not found",
+                          "request": req.toMap()
+                        })
+                      },
+              0);
 
           return;
         } catch (e) {
@@ -66,6 +77,7 @@ class DartExpress {
       callback(req, res);
       return;
     }
+    // taking each middlewares from the middleware list and adding to the callback 'next'
     middlewares[i](req, res, () {
       _addMiddleware(middlewares, req, res, callback, i + 1);
     });
@@ -93,13 +105,6 @@ class DartExpress {
   void end() {
     _requests.close();
   }
-}
-
-void setCorsHeaders(HttpResponse response) {
-  response.headers.add('Access-Control-Allow-Origin', '*');
-  response.headers
-      .add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  response.headers.add('Access-Control-Allow-Headers', 'Content-Type');
 }
 
 Function hanldeException(Function callback) {

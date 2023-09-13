@@ -23,7 +23,11 @@ class RouteTreeNode {
   }
 
   setMiddlewares(List<DECallBackWithNext> middlewares) {
-    _middlewares = middlewares;
+    if (_middlewares != null && _middlewares!.isNotEmpty) {
+      _middlewares!.addAll(middlewares);
+    } else {
+      _middlewares = middlewares;
+    }
   }
 
   get callback => _callback;
