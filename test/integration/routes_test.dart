@@ -17,6 +17,10 @@ void main() {
   });
 
   group("testing path", () {
+    test("if route not exist return 404", () async {
+      final Response data = await ApiService.get("$basePath/nwe/434");
+      expect(data.statusCode, 404);
+    });
     test("testing path /", () async {
       app.get("/", (req, res) {
         res.send("hello");
@@ -132,6 +136,16 @@ void main() {
 
       final Response data = await ApiService.get("$basePath/any/123");
       expect(data.body, "2");
+    });
+
+    test("if route not exist return 404 if middleware also there", () async {
+      app.use("*", [
+        (Req req, Res res, Function next) {
+          next();
+        }
+      ]);
+      final Response data = await ApiService.get("$basePath/nwe/434");
+      expect(data.statusCode, 404);
     });
   });
 }
