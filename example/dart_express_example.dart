@@ -3,22 +3,25 @@ import 'package:dart_express/src/middlewares/body_parser.dart';
 
 void main() {
   final app = DartExpress();
-  const portNumber = 7000;
+  const portNumber = 3000;
 
-  app.get("/hello", (req, res) {
-    res.json({"hello": 'world'});
-  });
+  // app.get("/hello", (req, res) {
+  //   res.json({"hello": 'world'});
+  // });
 
-  // app.use("*", [DEParser.jsonParser]);
-  app.use("/*", [
-    (req, res, next) {
-      next();
-    }
-  ]);
+  // app.use("/*", [
+  //   (req, res, next) {
+  //     next();
+  //   }
+  // ]);
 
-  app.post("/post", (req, res) {
+  app.get("/post/1", (req, res) {
+    res.send("/post/1");
+  }, middlewares: [DEParser.formUrlEncoded]);
+
+  app.get("/post", (req, res) {
     res.json(req.body);
-  });
+  }, middlewares: [DEParser.formDataParser]);
 
   app.listen(portNumber, () {
     print('Listening on port $portNumber');

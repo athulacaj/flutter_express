@@ -11,7 +11,7 @@ void main() {
   const basePath = "http://localhost:$portNumber";
   const nodeJsPath = "http://localhost:4000";
 
-  final app = DartExpress();
+  DartExpress app = DartExpress();
   app.listen(portNumber, () {
     print('Listening on port $portNumber');
   });
@@ -77,6 +77,11 @@ void main() {
   });
 
   group("testing middlewares", () {
+    // after all test
+    tearDown(() {
+      app.clear();
+    });
+
     test("all", () async {
       app.use("*", [
         (Req req, Res res, Function next) {
@@ -146,6 +151,37 @@ void main() {
       ]);
       final Response data = await ApiService.get("$basePath/nwe/434");
       expect(data.statusCode, 404);
+    });
+    test("testing in route middleware is only applied to that", () async {
+      app.clear();
+
+      app.use("/*", [
+        (req, res, next) {
+          next();
+        }
+      ]);
+
+      app.post("1/2", (Req req, Res res) {
+        res.send("hi");
+      }, middlewares: [
+        (Req req, Res res, Function next) {
+          print("2---");
+          res.send("2");
+        }
+      ]);
+
+      app.post("/1/1", (Req req, Res res) {
+        res.send("hi");
+      }, middlewares: [
+        (Req req, Res res, Function next) {
+          res.send("1");
+        }
+      ]);
+
+      final Response data = await ApiService.post("$basePath/1/1", body: {});
+      expect(data.body, "1");
+      final Response data2 = await ApiService.post("$basePath/1/2", body: {});
+      expect(data2.body, "2");
     });
   });
 }

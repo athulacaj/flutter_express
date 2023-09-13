@@ -70,6 +70,11 @@ class RouteTreeNode {
   }
 
   String toJson() => json.encode(toMap());
+
+  void dispose() {
+    children.clear();
+    middlewares?.clear();
+  }
 }
 
 class RouteTree {
@@ -112,55 +117,16 @@ class RouteTree {
         currentNode.children[pathPart] = newNode;
         currentNode = newNode;
       }
-      currentNode.setCallback(callback);
-      currentNode.setMiddlewares(middlewares ?? []);
       currentNode.setEnd(i == pathParts.length - 1);
-      currentNode.setOrder(order ?? 0);
     }
+    currentNode.setOrder(order ?? 0);
+    currentNode.setCallback(callback);
+    currentNode.setMiddlewares(middlewares ?? []);
+
+    // print(root);
   }
 
-  // RouteTreeNode? getRoute(String path) {
-  //   if (path.endsWith("/")) {
-  //     path = path.substring(0, path.length - 1);
-  //   }
-  //   List<String> pathParts = path.split("/");
-  //   RouteTreeNode currentNode = root;
-  //   String prvPathPart = "";
-
-  //   if (path == "/" && currentNode.end) {
-  //     return currentNode;
-  //   }
-  //   int i = 0;
-  //   for (i; i < pathParts.length; i++) {
-  //     String pathPart = pathParts[i];
-  //     if (pathPart == "") {
-  //       continue;
-  //     }
-  //     if (currentNode.children.containsKey(pathPart)) {
-  //       prvPathPart = pathPart;
-  //       currentNode = currentNode.children[pathPart]!;
-  //     } else if (currentNode.children.containsKey("*")) {
-  //       prvPathPart = "*";
-  //       currentNode = currentNode.children["*"]!;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-
-  //   if (currentNode.end && (i == pathParts.length || prvPathPart == "*")) {
-  //     final params = extractRouteParameters(currentNode.path, path);
-  //     currentNode.setParam(params);
-  //     currentNode.setParam(params);
-  //     return currentNode;
-  //   }
-  //   return null;
-  // }
-
   RouteTreeNode? getRoute(path) {
-    // if (path.endsWith("/")) {
-    //   path = path.substring(0, path.length - 1);
-    // }
-
     if (path == "/" && root.children['*'] != null && root.children['*']!.end) {
       return root.children['*'];
     }
@@ -277,6 +243,10 @@ class RouteTree {
     return root.toString();
     // traverse(root);
     // return '';
+  }
+
+  void dispose() {
+    root.dispose();
   }
 }
 

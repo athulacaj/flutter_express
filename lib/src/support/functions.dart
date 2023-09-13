@@ -19,16 +19,16 @@ class RequestManager {
         _getRequestTree.addRoute(path, callback, middlewares);
         break;
       case Method.post:
-        _postRequestTree.addRoute(path, callback);
+        _postRequestTree.addRoute(path, callback, middlewares);
         break;
       case Method.put:
-        _putRequestTree.addRoute(path, callback);
+        _putRequestTree.addRoute(path, callback, middlewares);
         break;
       case Method.delete:
-        _deleteRequestTree.addRoute(path, callback);
+        _deleteRequestTree.addRoute(path, callback, middlewares);
         break;
       case Method.patch:
-        _patchRequestTree.addRoute(path, callback);
+        _patchRequestTree.addRoute(path, callback, middlewares);
         break;
       default:
         break;
@@ -51,6 +51,14 @@ class RequestManager {
         return null;
     }
   }
+
+  void dispose() {
+    _getRequestTree.dispose();
+    _postRequestTree.dispose();
+    _putRequestTree.dispose();
+    _deleteRequestTree.dispose();
+    _patchRequestTree.dispose();
+  }
 }
 
 class MiddlewareManager {
@@ -66,6 +74,10 @@ class MiddlewareManager {
     List<RouteTreeNode> middlewares = middlewareTree.getMiddleware(path);
     middlewares.sort((a, b) => a.order.compareTo(b.order));
     return middlewares;
+  }
+
+  void dispose() {
+    middlewareTree.dispose();
   }
 }
 

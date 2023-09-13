@@ -44,18 +44,6 @@ class DEParser {
 
   static formDataParser(Req req, Res res, Function next) async {
     if (req.method != 'OPTIONS' && req.method != 'GET') {
-      // final String boundary = contentType.split('; ')[1].split('=')[1];
-
-      // String boundary = req.headers.contentType?.parameters['boundary'] ?? '';
-      // final bytes = Uint8List.fromList(req.bodyStream.expand((chunk) {
-      //   return chunk;
-      // }).toList());
-      // final file = http.MultipartFile.fromBytes('file', bytes,
-      //     filename: 'file', contentType: MediaType('image', 'jpeg'));
-
-      // // save the multipart file somewhere
-      // print(file.filename);
-
       final bodyBytes = req.bodyStream.expand((chunk) => chunk).toList();
       String test = String.fromCharCodes(bodyBytes);
 
@@ -78,19 +66,12 @@ class DEParser {
         final List<List<int>> keyValueParts = [];
         splitMultipart(part, [10, 13, 10], keyValueParts, 0, [10]);
         String result = String.fromCharCodes(keyValueParts[0]);
-        final headerLines = HeaderValue.parse(result);
         File('logs.txt').writeAsStringSync(result);
 
         writeUint8ListToFile(
             Uint8List.fromList(keyValueParts[1]), "./demo.png");
         print("**************        **************");
       }
-
-      // print(parts.length);
-      // req.request
-      //     .transform()
-      //     .map((part) => part.fold(0, (p, d) => p + d))
-      //     .listen((length) => print('Part with length $length'));
     }
     next();
   }

@@ -1,3 +1,4 @@
+import 'package:dart_express/dart_express.dart';
 import 'package:dart_express/src/support/functions.dart';
 import 'package:dart_express/src/support/route_tree.dart';
 import 'package:dart_express/src/constants/route_methods.dart';
@@ -258,6 +259,24 @@ void pathTest() {
     requestManager.addRequest("/*", Method.get, () {});
 
     expect(requestManager.getRequest("/", Method.get), isNotNull);
+  });
+  test("test middle to specific route work only for that route", () {
+    RequestManager requestManager = RequestManager();
+
+    requestManager.addRequest("/post/1", Method.get, () {}, middlewares: [
+      (Req req, Res res, next) {
+        next();
+      }
+    ]);
+    requestManager.addRequest("/post", Method.get, () {}, middlewares: [
+      (Req req, Res res, next) {
+        next();
+      }
+    ]);
+
+    // expect(requestManager.getRequest("/post/1", Method.get), isNotNull);
+    expect(requestManager.getRequest("/post/1", Method.get)!.middlewares.length,
+        1);
   });
 }
 

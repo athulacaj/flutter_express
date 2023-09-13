@@ -18,14 +18,6 @@ class DartExpress {
     callback();
 
     await _requests.forEach((request) async {
-      // if (request.method == 'OPTIONS') {
-      //   // Handle CORS preflight request
-      //   setCorsHeaders(request.response);
-      //   request.response.statusCode = HttpStatus.ok;
-      //   request.response.close();
-      //   return;
-      // }
-
       if (request.method == 'DOC') {
         request.response.statusCode = HttpStatus.ok;
         // request.response.write(_requestManager.getDoc());
@@ -98,12 +90,19 @@ class DartExpress {
   }
 
   /// Add a POST request to the server
-  void post(String path, DECallBack callback) {
-    _requestManager.addRequest(path, Method.post, hanldeException(callback));
+  void post(String path, DECallBack callback,
+      {List<DECallBackWithNext>? middlewares}) {
+    _requestManager.addRequest(path, Method.post, hanldeException(callback),
+        middlewares: middlewares);
   }
 
   void end() {
     _requests.close();
+  }
+
+  void clear() {
+    _requestManager.dispose();
+    _middlewareManager.dispose();
   }
 }
 
