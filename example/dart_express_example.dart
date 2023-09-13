@@ -9,14 +9,14 @@ void main() {
     next();
   }
 
-  app.use("/*", [m]);
+  // app.use("/*", [m]);
 
   app.get('/', (Req req, res) {
     print("sending response");
     res.send('Hello World! from "/"');
   });
 
-  app.get('/parent/', (Req req, res) {
+  app.get('/parent/*', (Req req, res) {
     res.send("parent 1");
   });
 
