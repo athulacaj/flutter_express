@@ -42,47 +42,47 @@ class DEParser {
     next();
   }
 
-  static formDataParser(Req req, Res res, Function next) async {
-    if (req.method != 'OPTIONS' && req.method != 'GET') {
-      final bodyBytes = req.bodyStream.expand((chunk) => chunk).toList();
-      String test = String.fromCharCodes(bodyBytes);
+  // static formDataParser(Req req, Res res, Function next) async {
+  //   if (req.method != 'OPTIONS' && req.method != 'GET') {
+  //     final bodyBytes = req.bodyStream.expand((chunk) => chunk).toList();
+  //     String test = String.fromCharCodes(bodyBytes);
 
-      final boundary = req.headers.contentType!.parameters['boundary'];
+  //     final boundary = req.headers.contentType!.parameters['boundary'];
 
-      // Read the request body into bodyBytes.
+  //     // Read the request body into bodyBytes.
 
-      final startBoundaryBytes = utf8.encode('--$boundary\r\n');
-      final endBoundaryBytes = utf8.encode('---$boundary--\r\n');
-      // - = 45, \r = 13, \n = 10
-      final headerEnd = utf8.encode('\r\n\r\n');
+  //     final startBoundaryBytes = utf8.encode('--$boundary\r\n');
+  //     final endBoundaryBytes = utf8.encode('---$boundary--\r\n');
+  //     // - = 45, \r = 13, \n = 10
+  //     final headerEnd = utf8.encode('\r\n\r\n');
 
-      final List<List<int>> parts = [];
-      splitMultipart(bodyBytes, startBoundaryBytes, parts, 0, endBoundaryBytes);
-      // File('logs.txt').writeAsStringSync(data.toString());
+  //     final List<List<int>> parts = [];
+  //     splitMultipart(bodyBytes, startBoundaryBytes, parts, 0, endBoundaryBytes);
+  //     // File('logs.txt').writeAsStringSync(data.toString());
 
-      for (List<int> part in parts) {
-        // split the  key and value charcodes
+  //     for (List<int> part in parts) {
+  //       // split the  key and value charcodes
 
-        final List<List<int>> keyValueParts = [];
-        splitMultipart(part, [10, 13, 10], keyValueParts, 0, [10]);
-        String result = String.fromCharCodes(keyValueParts[0]);
-        File('logs.txt').writeAsStringSync(result);
+  //       final List<List<int>> keyValueParts = [];
+  //       splitMultipart(part, [10, 13, 10], keyValueParts, 0, [10]);
+  //       String result = String.fromCharCodes(keyValueParts[0]);
+  //       File('logs.txt').writeAsStringSync(result);
 
-        writeUint8ListToFile(
-            Uint8List.fromList(keyValueParts[1]), "./demo.png");
-        print("**************        **************");
-      }
-    }
-    next();
-  }
+  //       writeUint8ListToFile(
+  //           Uint8List.fromList(keyValueParts[1]), "./demo.png");
+  //       print("**************        **************");
+  //     }
+  //   }
+  //   next();
+  // }
 
-  static Map<String, dynamic> parseMultipartForm(
-      List<int> bodyBytes, String boundary) {
-    // Implement a function to parse the multipart form data
-    // You can use a library like 'mime/multipart.dart' to help with parsing
-    // For simplicity, I'll omit the implementation here
-    throw UnimplementedError('Multipart form parsing is not implemented');
-  }
+  // static Map<String, dynamic> parseMultipartForm(
+  //     List<int> bodyBytes, String boundary) {
+  //   // Implement a function to parse the multipart form data
+  //   // You can use a library like 'mime/multipart.dart' to help with parsing
+  //   // For simplicity, I'll omit the implementation here
+  //   throw UnimplementedError('Multipart form parsing is not implemented');
+  // }
 }
 
 Future<void> writeUint8ListToFile(Uint8List uint8List, String filePath) async {

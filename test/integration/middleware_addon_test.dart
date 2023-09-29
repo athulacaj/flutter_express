@@ -18,12 +18,26 @@ void main() {
   });
 
   group("testing cors middleware", () {
-    app.use("*", [cors()]);
+    setUpAll(() {});
     test("1", () async {
+      app.use("*", [cors()]);
       final Response data = await ApiService.options(basePath);
       expect(data.headers['access-control-allow-origin'], "*");
       expect(data.headers['access-control-allow-methods'],
           "GET, POST, PUT, DELETE");
+
+      expect(data.body, "");
+    });
+    test("2", () async {
+      app.clear();
+      app.use("*", [
+        cors(options: CorsOptions(origin: ["http://localhost:8080"]))
+      ]);
+      final Response data = await ApiService.options(basePath);
+      expect(data.headers['access-control-allow-origin'], "*");
+      expect(data.headers['access-control-allow-methods'],
+          "GET, POST, PUT, DELETE");
+
       expect(data.body, "");
     });
   });

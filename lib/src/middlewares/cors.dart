@@ -24,13 +24,19 @@ void setCorsHeaders(Res res) {
   res.headers.add('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-DECallBackWithNext cors([CorsOptions? options]) {
-  options ??= CorsOptions();
+DECallBackWithNext cors({CorsOptions? options}) {
+  CorsOptions corsOptions = options ?? CorsOptions();
   return (Req req, Res res, Function next) {
     if (req.method == 'OPTIONS') {
       // Handle CORS preflight request
+      if (corsOptions.origin.contains(req.headers.value('origin'))) {
+        setCorsHeaders(res);
+        res.setStatusCode(HttpStatus.ok);
+        res.close();
+        return;
+      }
       setCorsHeaders(res);
-      res.setStatusCode(HttpStatus.ok);
+      res.setStatusCode(HttpStatus.forbidden);
       res.close();
       return;
     } else {
