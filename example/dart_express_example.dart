@@ -5,9 +5,11 @@ void main() {
   final app = DartExpress();
   const portNumber = 3000;
 
-  // app.get("/hello", (req, res) {
-  //   res.json({"hello": 'world'});
-  // });
+  app.use("*", [cors()]);
+
+  app.get("/hello", (req, res) {
+    res.json({"hello": 'world'});
+  });
 
   app.use("/*", [
     (req, res, next) {

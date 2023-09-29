@@ -18,13 +18,6 @@ class DartExpress {
     callback();
 
     await _requests.forEach((request) async {
-      if (request.method == 'DOC') {
-        request.response.statusCode = HttpStatus.ok;
-        // request.response.write(_requestManager.getDoc());
-        request.response.close();
-        return;
-      }
-
       final RouteTreeNode? listenedRequest =
           _requestManager.getRequest(request.uri.path, request.method);
 
