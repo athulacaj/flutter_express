@@ -9,19 +9,20 @@ void main() {
   //   res.json({"hello": 'world'});
   // });
 
-  // app.use("/*", [
-  //   (req, res, next) {
-  //     next();
-  //   }
-  // ]);
+  app.use("/*", [
+    (req, res, next) {
+      print(req.method);
+      next();
+    }
+  ]);
 
   app.get("/post/1", (req, res) {
     res.send("/post/1");
-  }, middlewares: [DEParser.formUrlEncoded]);
+  }, middlewares: [DEParser.jsonParser]);
 
   app.get("/post", (req, res) {
     res.json(req.body);
-  }, middlewares: [DEParser.formDataParser]);
+  }, middlewares: [DEParser.jsonParser]);
 
   app.listen(portNumber, () {
     print('Listening on port $portNumber');
