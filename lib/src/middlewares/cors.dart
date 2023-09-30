@@ -24,7 +24,7 @@ void setCorsHeaders(Res res) {
   res.headers.add('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-DECallBackWithNext cors([CorsOptions? options]) {
+FECallBackWithNext cors([CorsOptions? options]) {
   options ??= CorsOptions();
   return (Req req, Res res, Function next) {
     if (req.method == 'OPTIONS') {

@@ -7,7 +7,7 @@ import 'package:flutter_express/src/constants/route_methods.dart';
 import 'models/req_model.dart';
 import 'models/res_model.dart';
 
-class DartExpress {
+class FlutterExpress {
   late HttpServer _requests;
   final RequestManager _requestManager = RequestManager();
   final MiddlewareManager _middlewareManager = MiddlewareManager();
@@ -56,8 +56,8 @@ class DartExpress {
     });
   }
 
-  void _addMiddleware(List<DECallBackWithNext> middlewares, Req req, Res res,
-      DECallBack callback, int i) {
+  void _addMiddleware(List<FECallBackWithNext> middlewares, Req req, Res res,
+      FECallBack callback, int i) {
     if (i == middlewares.length) {
       callback(req, res);
       return;
@@ -68,7 +68,7 @@ class DartExpress {
     });
   }
 
-  use(String path, List<DECallBackWithNext> middlewares) {
+  use(String path, List<FECallBackWithNext> middlewares) {
     _middlewareManager.addMiddleware(path, middlewares);
   }
 
@@ -76,15 +76,15 @@ class DartExpress {
   /// * The callback must be a function that takes in a Req, Res object. note: if the [middlewares] are passed this will executed after the middlewares are executed
   /// * Optionally, you can pass in a list of middlewares to be executed before the callback
   /// * For middleware the callback must be a function that takes in a Req, Res object and a void that can be called to execute the next middleware or the callback
-  void get(String path, DECallBack callback,
-      {List<DECallBackWithNext>? middlewares}) {
+  void get(String path, FECallBack callback,
+      {List<FECallBackWithNext>? middlewares}) {
     _requestManager.addRequest(path, Method.get, hanldeException(callback),
         middlewares: middlewares);
   }
 
   /// Add a POST request to the server
-  void post(String path, DECallBack callback,
-      {List<DECallBackWithNext>? middlewares}) {
+  void post(String path, FECallBack callback,
+      {List<FECallBackWithNext>? middlewares}) {
     _requestManager.addRequest(path, Method.post, hanldeException(callback),
         middlewares: middlewares);
   }

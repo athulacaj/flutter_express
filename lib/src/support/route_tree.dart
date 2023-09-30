@@ -8,7 +8,7 @@ class RouteTreeNode {
   final String path;
   final String pathPart;
   Function? _callback;
-  List<DECallBackWithNext>? _middlewares;
+  List<FECallBackWithNext>? _middlewares;
   final Map<String, RouteTreeNode> children = {};
   final String? paramKey;
   bool _end = false;
@@ -22,7 +22,7 @@ class RouteTreeNode {
     _callback = callback;
   }
 
-  setMiddlewares(List<DECallBackWithNext> middlewares) {
+  setMiddlewares(List<FECallBackWithNext> middlewares) {
     if (_middlewares != null && _middlewares!.isNotEmpty) {
       _middlewares!.addAll(middlewares);
     } else {
@@ -81,7 +81,7 @@ class RouteTree {
   final RouteTreeNode root = RouteTreeNode("", "");
 
   addRoute(String path, Function? callback,
-      [List<DECallBackWithNext>? middlewares, int? order]) {
+      [List<FECallBackWithNext>? middlewares, int? order]) {
     if (path == "/") {
       root.setCallback(callback);
       root.setMiddlewares(middlewares ?? []);

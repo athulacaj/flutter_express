@@ -13,7 +13,7 @@ class RequestManager {
   get getRequestTree => _getRequestTree;
 
   void addRequest(String path, String method, callback,
-      {List<DECallBackWithNext>? middlewares}) {
+      {List<FECallBackWithNext>? middlewares}) {
     switch (method) {
       case Method.get:
         _getRequestTree.addRoute(path, callback, middlewares);
@@ -65,7 +65,7 @@ class MiddlewareManager {
   final RouteTree middlewareTree = RouteTree();
   int _order = 0;
 
-  void addMiddleware(String path, List<DECallBackWithNext> middlewares) {
+  void addMiddleware(String path, List<FECallBackWithNext> middlewares) {
     middlewareTree.addRoute(path, () => {}, middlewares, _order);
     _order++;
   }

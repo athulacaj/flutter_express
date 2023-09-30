@@ -1,8 +1,8 @@
 import 'package:flutter_express/flutter_express.dart';
-import 'package:flutter_express/dart_middlewares.dart';
+import 'package:flutter_express/middlewares.dart';
 
 void main() {
-  final app = DartExpress();
+  final app = FlutterExpress();
   const portNumber = 3000;
 
   // add middleware for every routes

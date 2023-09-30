@@ -10,7 +10,7 @@ void main() {
   const portNumber = 3000;
   const basePath = "http://localhost:$portNumber";
 
-  DartExpress app = DartExpress();
+  FlutterExpress app = FlutterExpress();
   app.listen(portNumber, () {
     print('Listening on port $portNumber');
   });

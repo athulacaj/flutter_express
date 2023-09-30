@@ -1,5 +1,5 @@
 
-Dart_Express is a lightweight and user-friendly routing package. It's perfect for swiftly crafting web applications, prototypes, or smaller projects without drowning in unnecessary complexity. Just like Express, it empowers developers to stay focused on their goals, making it a valuable asset whether you're a beginner or a pro seeking efficiency in smaller web development tasks.
+Flutter_Express is a lightweight and user-friendly routing package. It's perfect for swiftly crafting web applications, prototypes, or smaller projects without drowning in unnecessary complexity. Just like Express, it empowers developers to stay focused on their goals, making it a valuable asset whether you're a beginner or a pro seeking efficiency in smaller web development tasks.
 
 ## Features
 
@@ -12,6 +12,8 @@ Dart_Express is a lightweight and user-friendly routing package. It's perfect fo
 ## Getting started
 
 ```dart
+import 'package:flutter_express/flutter_express.dart';
+
 final app = DartExpress();
 const portNumber = 3000;
 
@@ -27,11 +29,11 @@ app.listen(portNumber, () {
 ## Usage
 
 ```dart
-import 'package:dart_express/dart_express.dart';
-import 'package:dart_express/dart_middlewares.dart';
+import 'package:flutter_express/flutter_express.dart';
+import 'package:flutter_express/middlewares.dart';
 
 void main() {
-  final app = DartExpress();
+  final app = FlutterExpress();
   const portNumber = 3000;
 
   // add middleware for every routes
