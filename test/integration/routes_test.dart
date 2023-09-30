@@ -9,7 +9,6 @@ import '../functions/api_service.dart';
 void main() {
   const portNumber = 3000;
   const basePath = "http://localhost:$portNumber";
-  const nodeJsPath = "http://localhost:4000";
 
   DartExpress app = DartExpress();
   app.listen(portNumber, () {

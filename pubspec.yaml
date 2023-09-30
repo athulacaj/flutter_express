@@ -1,16 +1,14 @@
 name: dart_express
 description: A routing package for dart.
-version: 0.5.0
-# repository: https://github.com/my_org/my_repo
+version: 0.6.0
+repository: https://github.com/athulacaj/dart_express
 
 environment:
   sdk: ^3.0.1
 
 # Add regular dependencies here.
 dependencies:
-  mime: ^1.0.4
-  path: ^1.8.0
-  http_parser: ^4.0.2
+
 
 dev_dependencies:
   lints: ^2.0.0
