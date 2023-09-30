@@ -26,9 +26,6 @@ app.listen(portNumber, () {
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
 ```dart
 import 'package:dart_express/dart_express.dart';
 import 'package:dart_express/dart_middlewares.dart';
