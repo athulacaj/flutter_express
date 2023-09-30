@@ -1,16 +1,3 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
 
 Dart_Express is a lightweight and user-friendly routing package. It's perfect for swiftly crafting web applications, prototypes, or smaller projects without drowning in unnecessary complexity. Just like Express, it empowers developers to stay focused on their goals, making it a valuable asset whether you're a beginner or a pro seeking efficiency in smaller web development tasks.
 
@@ -50,9 +37,8 @@ void main() {
   final app = DartExpress();
   const portNumber = 3000;
 
+  // add middleware for every routes
   app.use("*", [cors()]);
-
-
 
   app.use("/*", [
     (req, res, next) {
@@ -65,6 +51,12 @@ void main() {
     res.json({"hello": 'world'});
   });
 
+  app.get("/names/:name/*", (req, res) {
+    print("name ${req.params['name']}");
+    res.json({"name": req.params['name']});
+  });
+
+  // add a middleware for "/post" route
   app.post("/post", (req, res) {
     res.json(req.body);
   }, middlewares: [DEParser.jsonParser]);
@@ -73,6 +65,7 @@ void main() {
     print('Listening on port $portNumber');
   });
 }
+
 
 ```
 

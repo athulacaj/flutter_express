@@ -1,6 +1,6 @@
 name: dart_express
 description: A routing package for dart.
-version: 1.0.0
+version: 0.5.0
 # repository: https://github.com/my_org/my_repo
 
 environment:

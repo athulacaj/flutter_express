@@ -5,11 +5,8 @@ void main() {
   final app = DartExpress();
   const portNumber = 3000;
 
+  // add middleware for every routes
   app.use("*", [cors()]);
-
-  app.get("/hello", (req, res) {
-    res.json({"hello": 'world'});
-  });
 
   app.use("/*", [
     (req, res, next) {
@@ -18,11 +15,17 @@ void main() {
     }
   ]);
 
-  app.get("/post/1", (req, res) {
-    res.send("/post/1");
-  }, middlewares: [DEParser.jsonParser]);
+  app.get("/", (req, res) {
+    res.json({"hello": 'world'});
+  });
 
-  app.get("/post", (req, res) {
+  app.get("/names/:name/*", (req, res) {
+    print("name ${req.params['name']}");
+    res.json({"name": req.params['name']});
+  });
+
+  // add a middleware for "/post" route
+  app.post("/post", (req, res) {
     res.json(req.body);
   }, middlewares: [DEParser.jsonParser]);
 
