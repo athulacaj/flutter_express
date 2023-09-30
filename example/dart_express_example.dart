@@ -1,5 +1,5 @@
-import 'package:dart_express/dart_express.dart';
-import 'package:dart_express/dart_middlewares.dart';
+import 'package:flutter_express/flutter_express.dart';
+import 'package:flutter_express/dart_middlewares.dart';
 
 void main() {
   final app = DartExpress();

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_express/dart_express.dart';
+import 'package:flutter_express/flutter_express.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 

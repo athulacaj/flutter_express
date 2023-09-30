@@ -3,11 +3,11 @@ Dart_Express is a lightweight and user-friendly routing package. It's perfect fo
 
 ## Features
 
-* Routing Made Easy: Dart_Express simplifies URL routing, allowing developers to define routes and handle HTTP requests effortlessly. Define routes with clear, concise syntax and attach custom logic to each route.
+* Routing Made Easy: Flutter_express simplifies URL routing, allowing developers to define routes and handle HTTP requests effortlessly. Define routes with clear, concise syntax and attach custom logic to each route.
 
-* Middleware Support: Implement powerful middleware functions to handle tasks such as authentication, logging, and input validation. Dart_Express makes it seamless to insert middleware at various stages of the request-response cycle.
+* Middleware Support: Implement powerful middleware functions to handle tasks such as authentication, logging, and input validation. Flutter_express makes it seamless to insert middleware at various stages of the request-response cycle.
 
-* Flexible Request and Response Handling: Dart_Express provides intuitive request and response objects, giving developers fine-grained control over data input and output. Easily parse JSON, form data, or other request types.
+* Flexible Request and Response Handling: flutter_express provides intuitive request and response objects, giving developers fine-grained control over data input and output. Easily parse JSON, form data, or other request types.
 
 ## Getting started
 
