@@ -58,13 +58,12 @@ void main() {
   // add a middleware for "/post" route
   app.post("/post", (req, res) {
     res.json(req.body);
-  }, middlewares: [DEParser.jsonParser]);
+  }, middlewares: [Parser.jsonParser]);
 
   app.listen(portNumber, () {
     print('Listening on port $portNumber');
   });
 }
-
 
 ```
 

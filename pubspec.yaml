@@ -1,6 +1,6 @@
 name: flutter_express
-description: Flutter_Express is a lightweight and user-friendly routing package. It's perfect for swiftly crafting web applications, prototypes, or smaller projects without drowning in unnecessary complexity.
-version: 0.6.0
+description: Flutter_Express is a lightweight and user-friendly routing package.
+version: 0.6.1
 repository: https://github.com/athulacaj/flutter_express
 environment:
   sdk: ^3.0.1

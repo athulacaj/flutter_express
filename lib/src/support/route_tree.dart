@@ -80,6 +80,7 @@ class RouteTreeNode {
 class RouteTree {
   final RouteTreeNode root = RouteTreeNode("", "");
 
+  /// Function for adding the route tree
   addRoute(String path, Function? callback,
       [List<FECallBackWithNext>? middlewares, int? order]) {
     if (path == "/") {
@@ -126,6 +127,7 @@ class RouteTree {
     // print(root);
   }
 
+  /// Function for getting the route tree
   RouteTreeNode? getRoute(path) {
     if (path == "/" && root.children['*'] != null && root.children['*']!.end) {
       return root.children['*'];
@@ -182,6 +184,7 @@ class RouteTree {
     return resultNode;
   }
 
+  /// Function for getting the middleware tree
   List<RouteTreeNode> getMiddleware(path) {
     if (path == "/" && root.children['*'] != null && root.children['*']!.end) {
       return [root.children['*']!];
@@ -231,12 +234,12 @@ class RouteTree {
     return middlewareList;
   }
 
-  void traverse(RouteTreeNode node) {
-    node.children.forEach((key, RouteTreeNode value) {
-      print(value);
-      traverse(value);
-    });
-  }
+  // void traverse(RouteTreeNode node) {
+  //   node.children.forEach((key, RouteTreeNode value) {
+  //     print(value);
+  //     traverse(value);
+  //   });
+  // }
 
   @override
   String toString() {
@@ -248,17 +251,4 @@ class RouteTree {
   void dispose() {
     root.dispose();
   }
-}
-
-void main() {
-  MiddlewareManager middlewareManager = MiddlewareManager();
-  middlewareManager.addMiddleware("/hello", [
-    (req, res, next) {
-      print("middleware 1");
-      next();
-    }
-  ]);
-  print(middlewareManager.middlewareTree);
-  List<RouteTreeNode> nodes = middlewareManager.getMiddleware("/hello");
-  print(nodes);
 }

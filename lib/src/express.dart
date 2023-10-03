@@ -12,7 +12,9 @@ class FlutterExpress {
   final RequestManager _requestManager = RequestManager();
   final MiddlewareManager _middlewareManager = MiddlewareManager();
 
-  /// Start the server listening on the specified port
+  /// * Start the server listening on the specified port.
+  /// * [port] the port to run the server.
+  /// * [callback] the function hits affter the server starts.
   Future<void> listen(int port, Function callback) async {
     _requests = await HttpServer.bind(InternetAddress.anyIPv4, port);
     callback();
@@ -68,6 +70,10 @@ class FlutterExpress {
     });
   }
 
+  /// Add a middleware to the server
+  /// * [path] path of the route
+  /// * [middlewares] is a list of FECallBackWithNext.
+  /// * [FECallBackWithNext] is void Function(Req req, Res res, Function next). It is a function that takes in a Req, Res object and a void that can be called to execute the next middleware or the callback
   use(String path, List<FECallBackWithNext> middlewares) {
     _middlewareManager.addMiddleware(path, middlewares);
   }
@@ -78,28 +84,52 @@ class FlutterExpress {
   /// * For middleware the callback must be a function that takes in a Req, Res object and a void that can be called to execute the next middleware or the callback
   void get(String path, FECallBack callback,
       {List<FECallBackWithNext>? middlewares}) {
-    _requestManager.addRequest(path, Method.get, hanldeException(callback),
+    _requestManager.addRequest(path, Method.get, _hanldeException(callback),
         middlewares: middlewares);
   }
 
   /// Add a POST request to the server
+  /// * The callback must be a function that takes in a Req, Res object. note: if the [middlewares] are passed this will executed after the middlewares are executed
+  /// * Optionally, you can pass in a list of middlewares to be executed before the callback
+  /// * For middleware the callback must be a function that takes in a Req, Res object and a void that can be called to execute the next middleware or the callback
+
   void post(String path, FECallBack callback,
       {List<FECallBackWithNext>? middlewares}) {
-    _requestManager.addRequest(path, Method.post, hanldeException(callback),
+    _requestManager.addRequest(path, Method.post, _hanldeException(callback),
         middlewares: middlewares);
   }
 
+  void patch(String path, FECallBack callback,
+      {List<FECallBackWithNext>? middlewares}) {
+    _requestManager.addRequest(path, Method.patch, _hanldeException(callback),
+        middlewares: middlewares);
+  }
+
+  void put(String path, FECallBack callback,
+      {List<FECallBackWithNext>? middlewares}) {
+    _requestManager.addRequest(path, Method.put, _hanldeException(callback),
+        middlewares: middlewares);
+  }
+
+  void delete(String path, FECallBack callback,
+      {List<FECallBackWithNext>? middlewares}) {
+    _requestManager.addRequest(path, Method.delete, _hanldeException(callback),
+        middlewares: middlewares);
+  }
+
+  /// To close the requestxxw
   void end() {
     _requests.close();
   }
 
+  /// to clear all the routes and middlewares
   void clear() {
     _requestManager.dispose();
     _middlewareManager.dispose();
   }
 }
 
-Function hanldeException(Function callback) {
+Function _hanldeException(Function callback) {
   return (
     Req req,
     Res res,

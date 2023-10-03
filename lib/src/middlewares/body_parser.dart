@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import '../models/req_model.dart';
 import '../models/res_model.dart';
 
-class DEParser {
+class Parser {
   static jsonParser(Req req, Res res, Function next) {
     if (req.headers.contentType?.mimeType == 'application/json' &&
         req.method != 'OPTIONS' &&

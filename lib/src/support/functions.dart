@@ -12,6 +12,7 @@ class RequestManager {
 
   get getRequestTree => _getRequestTree;
 
+  /// add request based on the method
   void addRequest(String path, String method, callback,
       {List<FECallBackWithNext>? middlewares}) {
     switch (method) {
@@ -35,6 +36,7 @@ class RequestManager {
     }
   }
 
+  /// get request based on the method
   RouteTreeNode? getRequest(String path, String method) {
     switch (method) {
       case Method.get:
@@ -52,6 +54,7 @@ class RequestManager {
     }
   }
 
+  /// dispose the routes tree
   void dispose() {
     _getRequestTree.dispose();
     _postRequestTree.dispose();
@@ -65,11 +68,13 @@ class MiddlewareManager {
   final RouteTree middlewareTree = RouteTree();
   int _order = 0;
 
+  /// add middlewares for the specific route
   void addMiddleware(String path, List<FECallBackWithNext> middlewares) {
     middlewareTree.addRoute(path, () => {}, middlewares, _order);
     _order++;
   }
 
+  /// get middlewares for the specific route
   List<RouteTreeNode> getMiddleware(String path) {
     List<RouteTreeNode> middlewares = middlewareTree.getMiddleware(path);
     middlewares.sort((a, b) => a.order.compareTo(b.order));

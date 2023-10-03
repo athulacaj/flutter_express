@@ -30,7 +30,7 @@ void main() {
 
   group("testing body parser", () {
     test("json parser", () async {
-      app.use("*", [DEParser.jsonParser]);
+      app.use("*", [Parser.jsonParser]);
       app.post("/", (req, res) {
         res.json(req.body);
       });
@@ -39,7 +39,7 @@ void main() {
       expect(jsonDecode(data.body), mock);
     });
     test("form data parser", () async {
-      app.use("*", [DEParser.jsonParser]);
+      app.use("*", [Parser.jsonParser]);
       app.post("/", (req, res) {
         res.json(req.body);
       });
