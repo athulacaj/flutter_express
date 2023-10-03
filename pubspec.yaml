@@ -1,6 +1,6 @@
 name: flutter_express
 description: Flutter_Express is a lightweight and user-friendly routing package.
-version: 0.6.1
+version: 0.6.5
 repository: https://github.com/athulacaj/flutter_express
 environment:
   sdk: ^3.0.1
