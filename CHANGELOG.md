@@ -1,4 +1,4 @@
-# 0.6.5
+# 0.7.0
 - Added patch, put, delete methods
 
 # 0.6.1
