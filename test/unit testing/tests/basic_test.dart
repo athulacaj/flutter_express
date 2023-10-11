@@ -51,6 +51,24 @@ void basicTest() {
         expect(requestManager.getRequest('/new123', Method.get), isNull);
       });
 
+      test('testing put method', () {
+        requestManager.addRequest('/123445', Method.put, () => {});
+        expect(
+            requestManager.getRequest('/123445', Method.put)?.path, '/123445');
+      });
+
+      test('testing delete method', () {
+        requestManager.addRequest('/123445', Method.delete, () => {});
+        expect(requestManager.getRequest('/123445', Method.delete)?.path,
+            '/123445');
+      });
+
+      test('testing patch method', () {
+        requestManager.addRequest('/123445', Method.patch, () => {});
+        expect(requestManager.getRequest('/123445', Method.patch)?.path,
+            '/123445');
+      });
+
       ///
     });
   });
